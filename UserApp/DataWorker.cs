@@ -7,7 +7,7 @@ namespace UserApp
 {
     public static class DataWorker
     {
-        public static void WriteDataInFile(string filePath, params object[] data)
+        public static void WriteDataToFile(string filePath, params object[] data)
         {
             using (StreamWriter sw = File.CreateText(filePath))
             {
