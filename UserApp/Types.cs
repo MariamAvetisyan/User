@@ -9,7 +9,6 @@ namespace UserApp
        FirstName, LastName, EmailAddress, PhoneNumber
     }
 
-
     public enum Commands
     {
         AddUser, RemoveUser, ShowUser , EditUser, ShowAllUsers, RemoveAllUsers, Quite
