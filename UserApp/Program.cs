@@ -18,6 +18,8 @@ namespace UserApp
             object command;
             int retryCount = 3;
             int id = 0;
+            string email;
+            string phoneNumber;
             while (true)
             {
                 try
@@ -40,10 +42,37 @@ namespace UserApp
                                 myUser.FirstName = Console.ReadLine();
                                 Console.WriteLine("Please enter your last name");
                                 myUser.Lastname = Console.ReadLine();
-                                Console.WriteLine("Please enter your email address");
-                                myUser.EmailAddress = Console.ReadLine();
-                                Console.WriteLine("Please enter your phone number");
-                                myUser.PhoneNumber = Console.ReadLine();
+
+                                for (int i = 0; i < retryCount; i++)
+                                {
+                                    Console.WriteLine("Please enter your email address");
+                                    email = Console.ReadLine();
+                                    if (Validation.IsValidEmail(email))
+                                    {
+                                        myUser.EmailAddress = email;
+                                        break;
+                                    }
+                                    else if (i == 2)
+                                    {
+                                        throw new Exception("Wrong email address format");
+
+                                    }
+                                }
+
+                                for (int i = 0; i < retryCount; i++)
+                                {
+                                    Console.WriteLine("Please enter your phone number");
+                                    phoneNumber = Console.ReadLine();
+                                    if (Validation.IsPhoneNumber(phoneNumber))
+                                    {
+                                        myUser.PhoneNumber = phoneNumber;
+                                        break;
+                                    }
+                                    else if (i == 2)
+                                    {
+                                        throw new Exception("Wrong phone number format");
+                                    }
+                                }
                                 userRepository.AddUser(myUser);
                                 break;
                             case Commands.RemoveUser:
@@ -76,8 +105,50 @@ namespace UserApp
 
                                             if (Enum.TryParse(typeof(UserProperties), Console.ReadLine(), out element))
                                             {
-                                                Console.WriteLine("Please provide corresponding value");
-                                                string elementValue = Console.ReadLine();
+                                                string elementValue = string.Empty;
+                                                switch ((UserProperties)element)
+                                                {
+                                                    case UserProperties.EmailAddress:
+                                                        for (int iteration = 0; iteration < retryCount; iteration++)
+                                                        {
+                                                            Console.WriteLine("Please provide email address");
+                                                            email = Console.ReadLine();
+                                                            if (Validation.IsValidEmail(email))
+                                                            {
+                                                                elementValue = email;
+                                                                break;
+                                                            }
+                                                            else if (i == 2)
+                                                            {
+                                                                throw new Exception("Wrong phone number format");
+                                                            }
+                                                        }
+                                                        break;
+                                                    case UserProperties.PhoneNumber:
+                                                        for (int iteration = 0; iteration < retryCount; iteration++)
+                                                        {
+                                                            Console.WriteLine("Please enter your phone number");
+                                                            phoneNumber = Console.ReadLine();
+                                                            if (Validation.IsPhoneNumber(phoneNumber))
+                                                            {
+                                                                elementValue = phoneNumber;
+                                                                break;
+                                                            }
+                                                            else if (i == 2)
+                                                            {
+                                                                throw new Exception("Wrong phone number format");
+                                                            }
+                                                        }
+                                                        break;
+                                                    case UserProperties.FirstName:
+                                                        Console.WriteLine("Please enter first name");
+                                                        elementValue = Console.ReadLine();
+                                                        break;
+                                                    case UserProperties.LastName:
+                                                        Console.WriteLine("Please enter last name");
+                                                        elementValue = Console.ReadLine();
+                                                        break;
+                                                }
                                                 userRepository.Update(userRepository.GetUser(id), (UserProperties)element, elementValue);
                                                 break;
                                             }
@@ -118,7 +189,6 @@ namespace UserApp
                     Console.ForegroundColor = ConsoleColor.White;
 
                 }
-
             }
         }
     }
